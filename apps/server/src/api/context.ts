@@ -20,9 +20,7 @@ const decodeAndVerifyJwtToken = (token: string) => {
 export const createContext = ({ req, res }: CreateFastifyContextOptions) => {
   if (req.headers.authorization) {
     try {
-      const user = decodeAndVerifyJwtToken(
-        req.headers.authorization.split(' ')[1],
-      )
+      const user = decodeAndVerifyJwtToken(req.headers.authorization.split(' ')[1])
       return { req, res, prisma, user }
     } catch (err) {
       throw new TRPCError({ message: 'Unauthorized', code: 'UNAUTHORIZED' })
