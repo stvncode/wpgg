@@ -2,39 +2,13 @@ import type { User } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
 import { sign } from 'jsonwebtoken'
 import { hash, compare } from 'bcryptjs'
-import type { SignInDto, SignUpDto } from '../schema/authSchema'
+import type { SignInDto } from '../schema/authSchema'
 import { authConfig } from '../../../config/authConfig'
 import type { Context } from '../context'
 
-type UserResponse = Omit<User, 'password'>
-type SignUpResult = UserResponse & { accessToken: string }
+type UserResponse = Omit<User, 'password'> & { accessToken: string }
 
-export const signUp = async (
-  input: SignUpDto,
-  ctx: Context,
-): Promise<UserResponse> => {
-  const bcryptHash = await hash(input.password, 10)
-
-  const user = await ctx.prisma.user.create({
-    data: {
-      email: input.email,
-      password: bcryptHash,
-      role: 'user',
-    },
-  })
-  return {
-    id: user.id,
-    email: user.email,
-    createdAt: user.createdAt,
-    updatedAt: user.updatedAt,
-    role: user.role,
-  }
-}
-
-export const signIn = async (
-  input: SignInDto,
-  ctx: Context,
-): Promise<SignUpResult> => {
+export const signIn = async (input: SignInDto, ctx: Context): Promise<UserResponse> => {
   const user = await ctx.prisma.user.findUnique({
     where: {
       email: input.email,
@@ -47,7 +21,35 @@ export const signIn = async (
   })
 
   if (!user) {
-    throw error
+    const bcryptHash = await hash(input.password, 10)
+
+    const newUser = await ctx.prisma.user.create({
+      data: {
+        email: input.email,
+        password: bcryptHash,
+        role: input.role,
+        pseudo: input.pseudo,
+      },
+    })
+
+    const newToken = sign(
+      {
+        id: newUser.id,
+        roles: newUser.role,
+      },
+      authConfig.secretKey,
+      { expiresIn: authConfig.jwtExpiresIn }
+    )
+
+    return {
+      id: newUser.id,
+      email: newUser.email,
+      createdAt: newUser.createdAt,
+      updatedAt: newUser.updatedAt,
+      role: newUser.role,
+      accessToken: newToken,
+      pseudo: newUser.pseudo,
+    }
   }
 
   const result = await compare(input.password, user.password)
@@ -62,7 +64,7 @@ export const signIn = async (
       roles: user.role,
     },
     authConfig.secretKey,
-    { expiresIn: authConfig.jwtExpiresIn },
+    { expiresIn: authConfig.jwtExpiresIn }
   )
 
   return {
@@ -72,5 +74,6 @@ export const signIn = async (
     updatedAt: user.updatedAt,
     role: user.role,
     accessToken: token,
+    pseudo: user.pseudo,
   }
 }

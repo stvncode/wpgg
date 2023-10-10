@@ -1,16 +1,18 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from 'react-hook-form'
 import { LoginSchema, loginSchema } from "./Login.schema"
-import { Button, Flex, Select, Text, TextFieldInput } from "@radix-ui/themes"
+import { Button, Checkbox, Flex, Separator, Text, TextFieldInput } from "@radix-ui/themes"
 import { LoginFormLabel, LoginFormWrapper } from "./Login.styles"
-import { FormLabel } from "components/Form"
+import { FormError, FormLabel } from "components/Form"
 import { useNavigate } from "react-router-dom"
 import { trpc } from "core/trpc"
 import { useUser } from "hooks/useUser"
-import { decodeAndVerifyJwtToken } from "core/utils"
+import toast from 'react-hot-toast'
+import { UserRole } from "server/src/api/schema/authSchema"
+import { Loader } from "components/Loader"
 
-export const LoginForm = () => {
-    const { setUser } = useUser()
+export const LoginForm = ({ tabs, closeModal }: { tabs: 'signIn' | 'signUp', closeModal: () => void }) => {
+    const { setUser, setToken } = useUser()
     const {
         register,
         handleSubmit,
@@ -19,72 +21,58 @@ export const LoginForm = () => {
         resolver: zodResolver(loginSchema),
     })
 
-    // const navigate = useNavigate();
+    console.log(errors)
 
-    const signUpMutation = trpc.auth.signUp.useMutation({
-        onSuccess({ email, role, }) {
-            // toast.info('Success!');
-            // navigate('/login');
-            // useUser
-            console.log(email, role)
-        },
-        onError(error) {
-            // toast.error(error.message);
-        },
-    });
+    const navigate = useNavigate()
 
-    const signInMutation = trpc.auth.signIn.useMutation({
+    const { mutateAsync, isLoading } = trpc.auth.signIn.useMutation({
         onSuccess(data) {
-            // toast.info('Success!');
-            // navigate('/login');
-            // setUser({ email, role: role as UserRole })
-            // setToken(accessToken)
-
-            console.log('data', data)
-            console.log(decodeAndVerifyJwtToken(data.accessToken))
+            toast.success('Success!')
+            navigate('/login')
+            setToken(data.accessToken)
+            setUser({ email: data.email, pseudo: data.pseudo, role: data.role as UserRole })
+            closeModal()
         },
         onError(error) {
-            // toast.error(error.message);
+            toast.error(error.message)
         },
     });
-    const onSubmit = (values: LoginSchema) => {
-        signInMutation.mutate(values)
+    const onSubmit = async (values: LoginSchema) => {
+        console.log(values)
+        await mutateAsync({ email: values.email, password: values.password, pseudo: values.pseudo, role: UserRole.ADMIN })
     }
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <LoginFormWrapper>
                 <LoginFormLabel>
+                    <FormLabel name="Pseudo" />
+                </LoginFormLabel>
+                <TextFieldInput {...register("pseudo")} size="3" variant="surface" placeholder="Pseudo" />
+                <FormError error={errors.pseudo} />
+                <LoginFormLabel>
                     <FormLabel name="Email" />
                 </LoginFormLabel>
-                <TextFieldInput {...register("email")} />
-                {errors.email && (
-                    <Text color="tomato">
-                        {errors.email?.message}
-                    </Text>
-                )}
-                <LoginFormLabel>
-                    <FormLabel name="Role" />
-                </LoginFormLabel>
-                <select {...register("role")}>
-                    <option value="admin">Admin</option>
-                    <option value="user">User</option>
-                </select>
-                {errors.role && (
-                    <Text color="tomato">
-                        {errors.role?.message}
-                    </Text>
-                )}
+                <TextFieldInput {...register("email")} size="3" variant="surface" placeholder="Email" />
+                <FormError error={errors.email} />
                 <LoginFormLabel>
                     <FormLabel name="Password" />
                 </LoginFormLabel>
-                <TextFieldInput type="password" {...register("password")} />
-                {errors.password && (
-                    <Text color="tomato">
-                        {errors.password?.message}
-                    </Text>
-                )}
-                <Button type="submit">Login</Button>
+                <TextFieldInput type="password" {...register("password")} size="3" variant="surface" placeholder="Password" />
+                <FormError error={errors.password} />
+                <Flex gap="3" align="center">
+                    <Checkbox defaultChecked {...register("terms")} />
+                    <Text size="1" color="gray">I agree to the <Text size="1" color="blue">Terms of Service</Text> and <Text size="1" color="blue">Privacy Policy</Text></Text>
+                </Flex>
+                <FormError error={errors.terms} />
+                <Button mt="2" size="3" type="submit">
+                    {isLoading ? <Loader /> : tabs === 'signUp' ? 'Create an account' : 'Sign in'}
+                </Button>
+                <Flex mt="1" justify="center" align="center" width="100%">
+                    <Separator size="3" />
+                    <Text ml="4" mr="4" size="1" color="gray">or</Text>
+                    <Separator size="3" />
+                </Flex>
             </LoginFormWrapper>
         </form>
     )

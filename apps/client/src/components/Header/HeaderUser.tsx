@@ -3,9 +3,11 @@ import { Button, DropdownMenu } from '@radix-ui/themes'
 import { AuthModal } from 'components/AuthModal/AuthModal'
 import { useUser } from 'hooks/useUser'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 export const HeaderUser = () => {
-    const { user } = useUser()
+    const { user, deleteUser } = useUser()
+    const navigate = useNavigate()
 
     const [modalState, setModalState] = useState<{ open: boolean, type: 'signIn' | 'signUp' }>({ open: false, type: 'signIn' })
 
@@ -15,16 +17,21 @@ export const HeaderUser = () => {
     const onModalTypeChange = (type: 'signIn' | 'signUp') =>
         setModalState({ open: true, type: type })
 
+    const logout = () => {
+        deleteUser()
+        navigate('/')
+    }
+
     return <>
         {user?.email ?
             <DropdownMenu.Root>
                 <DropdownMenu.Trigger>
                     <Button size="2" radius='full' style={{ cursor: 'pointer', textTransform: 'uppercase' }}>
-                        {user.email.slice(0, 2)}
+                        {user.pseudo.slice(0, 1)}
                     </Button>
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Content sideOffset={10}>
-                    <DropdownMenu.Item style={{ cursor: 'pointer' }} shortcut="⌘ L" color='red'>Sign out</DropdownMenu.Item>
+                    <DropdownMenu.Item style={{ cursor: 'pointer' }} shortcut="⌘ L" color='red' onClick={logout}>Sign out</DropdownMenu.Item>
                 </DropdownMenu.Content>
             </DropdownMenu.Root>
             : <DropdownMenu.Root >
@@ -40,6 +47,6 @@ export const HeaderUser = () => {
                 </DropdownMenu.Content>
             </DropdownMenu.Root >
         }
-        <AuthModal open={modalState.open} setOpen={onModalStateChange} />
+        <AuthModal modalState={modalState} setOpen={onModalStateChange} />
     </>
 }

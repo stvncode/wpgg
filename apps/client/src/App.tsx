@@ -1,5 +1,6 @@
-import { Theme, ThemePanel } from '@radix-ui/themes'
+import { Theme } from '@radix-ui/themes'
 import { QueryClientProvider } from '@tanstack/react-query'
+import { Toast } from 'components/Toast'
 import { router } from 'core/routes'
 import { trpc } from 'core/trpc'
 import { useQueryTrpcClient } from 'hooks/useQueryClient'
@@ -14,7 +15,7 @@ export const App = () => {
         <QueryClientProvider client={queryClient}>
           <RouterProvider router={router} />
         </QueryClientProvider>
-        <ThemePanel />
+        <Toast />
       </Theme>
     </trpc.Provider>
   )

@@ -16,9 +16,9 @@ export const useQueryTrpcClient = () => {
         httpBatchLink({
           url: API_URL,
           headers() {
-            const userJson = localStorage.getItem('user')
-            if (userJson) {
-              const user = JSON.parse(userJson)
+            const userToken = localStorage.getItem('token')
+            if (userToken) {
+              const user = JSON.parse(userToken)
               if (user?.accessToken) {
                 return {
                   authorization: `Bearer ${user?.accessToken}`,

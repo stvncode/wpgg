@@ -4,19 +4,22 @@ import { useState } from 'react'
 import { AuthModalForm } from './AuthModalForm'
 
 interface AuthModalProps {
-    open: boolean
+    modalState: {
+        open: boolean;
+        type: 'signIn' | 'signUp';
+    }
     setOpen: (open: boolean) => void
 }
 
-export const AuthModal = ({ open, setOpen }: AuthModalProps) => {
-    const [tabs, setTabs] = useState<'signUp' | 'signIn'>('signUp')
+export const AuthModal = ({ modalState, setOpen }: AuthModalProps) => {
+    const [tabs, setTabs] = useState<'signUp' | 'signIn'>(modalState.type)
 
     const buttonVariants = (currentTab: typeof tabs) => tabs === currentTab ? 'soft' : 'ghost'
 
     const changeTabs = (tab: typeof tabs) => setTabs(tab)
 
     return (
-        <Dialog.Root open={open} onOpenChange={setOpen}>
+        <Dialog.Root open={modalState.open} onOpenChange={setOpen}>
             <ModalContent>
                 <Flex>
                     <ModalImg src='/link.jpeg' alt='link' />
@@ -28,7 +31,7 @@ export const AuthModal = ({ open, setOpen }: AuthModalProps) => {
                             </Flex>
                             <CloseModal style={{ cursor: 'pointer' }} onClick={() => setOpen(false)} />
                         </Flex>
-                        <AuthModalForm tabs={tabs} />
+                        <AuthModalForm tabs={tabs} closeModal={() => setOpen(false)} />
                     </Flex>
                 </Flex>
             </ModalContent>

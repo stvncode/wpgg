@@ -1,5 +1,4 @@
 import { Flex, Text } from '@radix-ui/themes'
-import { FC } from 'react'
 
 interface FormLabelProps {
     name: string

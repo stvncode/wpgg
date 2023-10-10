@@ -12,8 +12,9 @@ export const userSchema = z.object({
     })
     .email(),
   role: z.nativeEnum(UserRole, {
-    required_error: 'role is required',
+    required_error: 'Role is required',
   }),
+  pseudo: z.string({required_error: 'Pseudo is required'}),
   password: z
     .string({
       required_error: 'Password is required',
@@ -22,4 +23,3 @@ export const userSchema = z.object({
 })
 
 export type SignInDto = z.TypeOf<typeof userSchema>
-export type SignUpDto = z.TypeOf<typeof userSchema>

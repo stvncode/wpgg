@@ -10,6 +10,7 @@ export const prisma = new PrismaClient()
 export interface User {
   email: string
   role: 'user' | 'admin'
+  pseudo: string
 }
 
 const decodeAndVerifyJwtToken = (token: string) => {

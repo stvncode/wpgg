@@ -1,10 +1,10 @@
-import { UserRole } from 'server/src/api/schema/authSchema'
 import * as z from 'zod'
 
 export const loginSchema = z.object({
   email: z.string().email(),
-  role: z.nativeEnum(UserRole),
-  password: z.string().min(6).max(100),
+  pseudo: z.string({ required_error: 'Password must be 3 caracters lenght' }).min(3).max(100),
+  password: z.string({ required_error: 'Password must be 8 caracters lenght' }).min(8).max(100),
+  terms: z.string({ required_error: 'You must accept the erms and condition' }).default('true'),
 })
 
 export type LoginSchema = z.infer<typeof loginSchema>
