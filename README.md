@@ -1,39 +1,41 @@
-# Turborepo kitchen sink starter
+# 🚀 FullStack Auth Starter Repo
 
-This is an official starter Turborepo with multiple meta-frameworks all working in harmony and sharing packages.
+Welcome to our FullStack Auth Starter Repo - your one-stop solution to kickstart robust, scalable, and seamlessly connected backend and frontend applications with user authentication implemented right out of the box!
 
-This example also shows how to use [Workspace Configurations](https://turbo.build/repo/docs/core-concepts/monorepos/configuring-workspaces).
+## 🎯 Purpose
 
-## Using this example
+This repository provides a comprehensive starter kit for developers looking to build applications that require user authentication. It's engineered with some of the best technologies in the JavaScript/TypeScript ecosystem, ensuring a smooth development experience and a high-quality application structure.
 
-Run the following command:
+### 🏗️ Stack Used
 
-```sh
-npx create-turbo@latest -e kitchen-sink
-```
+#### Server
 
-## What's inside?
+- **Fastify**: Efficient and low overhead web framework, for high-performance applications.
+- **tRPC**: End-to-end typesafe APIs made easy.
+- **Prisma**: Next-gen ORM for Node.js and TypeScript.
+- **jsonwebtoken**: A robust library to work with JSON Web Tokens.
+- **Pino**: Super fast, all natural json logger.
 
-This Turborepo includes the following packages and apps:
+#### Client
 
-### Apps and Packages
+- **React**: A JavaScript library for building user interfaces.
+- **tRPC-client**: A client for trpc.
+- **React-query**: A powerful server-runtime for React to create APIs.
+- **Stitches**: Modern CSS-in-JS with near-zero runtime.
+- **Radix UI**: Low-level UI primitives to build high-quality, accessible design systems without sacrificing style.
+- **React Hook Form**: Manage your forms state efficiently.
+- **Zod**: Schema declaration and validation.
+- **Framer Motion**: A production-ready motion library for React.
+- **ts-pattern**: Pattern matching library for TypeScript.
 
-- `api`: an [Express](https://expressjs.com/) server
-- `storefront`: a [Next.js](https://nextjs.org/) app
-- `admin`: a [Vite](https://vitejs.dev/) single page app
-- `blog`: a [Remix](https://remix.run/) blog
-- `logger`: isomorphic logger (a small wrapper around console.log)
-- `ui`: a dummy React UI library (which contains a single `<CounterButton>` component)
-- `scripts`: Jest and ESLint configurations
-- `tsconfig`: tsconfig.json's used throughout the monorepo
+... and many more awesome technologies!
 
-Each package and app is 100% [TypeScript](https://www.typescriptlang.org/).
+## 🏁 Getting Started
 
-### Utilities
+Clone the repository to your local machine to get started with robust full-stack development.
 
-This Turborepo has some additional tools already setup for you:
+### 🛠️ Installation
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Jest](https://jestjs.io) test runner for all things JavaScript
-- [Prettier](https://prettier.io) for code formatting
+Ensure you have [Node.js](https://nodejs.org/) installed. Then, run the following commands:
+
+[TODO]

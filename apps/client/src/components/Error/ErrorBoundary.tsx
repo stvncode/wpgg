@@ -5,8 +5,6 @@ export const ErrorBoundary = () => {
     const error = useRouteError() as Error
     const navigate = useNavigate()
 
-    console.error(error)
-
     return (
         <Flex style={{ marginTop: '$2', alignSelf: 'flex-start' }} gap="2" direction="column">
             <Text>An Error occured</Text>

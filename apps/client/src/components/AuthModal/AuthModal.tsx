@@ -6,7 +6,7 @@ import { AuthModalForm } from './AuthModalForm'
 interface AuthModalProps {
     modalState: {
         open: boolean;
-        type: 'signIn' | 'signUp';
+        type: 'signIn' | 'signUp'
     }
     setOpen: (open: boolean) => void
 }

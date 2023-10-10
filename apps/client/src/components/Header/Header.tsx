@@ -32,7 +32,8 @@ export const Header = () => {
 
     return (
         <HeaderWrapper justify="between">
-            <Flex align="center" gap="3" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
+            <Flex align="center" gap="1" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
+                <img src="/logo.png" alt="logo" width="40" height="40" />
                 <Text size="6" weight="bold">Stvncode</Text>
             </Flex>
             <Flex align="center" gap="3">

@@ -21,8 +21,6 @@ export const LoginForm = ({ tabs, closeModal }: { tabs: 'signIn' | 'signUp', clo
         resolver: zodResolver(loginSchema),
     })
 
-    console.log(errors)
-
     const navigate = useNavigate()
 
     const { mutateAsync, isLoading } = trpc.auth.signIn.useMutation({
@@ -38,7 +36,6 @@ export const LoginForm = ({ tabs, closeModal }: { tabs: 'signIn' | 'signUp', clo
         },
     });
     const onSubmit = async (values: LoginSchema) => {
-        console.log(values)
         await mutateAsync({ email: values.email, password: values.password, pseudo: values.pseudo, role: UserRole.ADMIN })
     }
 

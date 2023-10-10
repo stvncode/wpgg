@@ -13,7 +13,7 @@ export interface ServerOptions {
   environment: 'development' | 'production' | 'test' | 'local'
 }
 
-export const createServer =  (opts: ServerOptions) => {
+export const createServer = (opts: ServerOptions) => {
   const port = opts.port ?? 3000
   const prefix = opts.prefix ?? '/trpc'
 
@@ -25,10 +25,7 @@ export const createServer =  (opts: ServerOptions) => {
   const prettyLogger = pino({ level: 'debug' }, stream)
 
   const server = fastify({
-    logger:
-      opts.environment === 'local' || opts.environment === 'test'
-        ? prettyLogger
-        : true,
+    logger: opts.environment === 'local' || opts.environment === 'test' ? prettyLogger : true,
   })
 
   server.register(cors, {
